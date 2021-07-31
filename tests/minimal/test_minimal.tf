@@ -11,36 +11,47 @@ terraform {
   }
 }
 
+resource "aci_rest" "fvTenant" {
+  dn         = "uni/tn-TF"
+  class_name = "fvTenant"
+}
+
 module "main" {
   source = "../.."
 
-  name = "ABC"
+  tenant = aci_rest.fvTenant.content.name
+  name   = "BD1"
+  vrf    = "VRF1"
 }
 
-data "aci_rest" "fvTenant" {
-  dn = "uni/tn-ABC"
+data "aci_rest" "fvBD" {
+  dn = "uni/tn-${aci_rest.fvTenant.content.name}/BD-${module.main.name}"
 
   depends_on = [module.main]
 }
 
-resource "test_assertions" "fvTenant" {
-  component = "fvTenant"
+resource "test_assertions" "fvBD" {
+  component = "fvBD"
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.fvTenant.content.name
-    want        = "ABC"
+    got         = data.aci_rest.fvBD.content.name
+    want        = module.main.name
   }
+}
 
-  equal "nameAlias" {
-    description = "nameAlias"
-    got         = data.aci_rest.fvTenant.content.nameAlias
-    want        = ""
-  }
+data "aci_rest" "fvRsCtx" {
+  dn = "${data.aci_rest.fvBD.id}/rsctx"
 
-  equal "descr" {
-    description = "descr"
-    got         = data.aci_rest.fvTenant.content.descr
-    want        = ""
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "fvRsCtx" {
+  component = "fvRsCtx"
+
+  equal "tnFvCtxName" {
+    description = "tnFvCtxName"
+    got         = data.aci_rest.fvRsCtx.content.tnFvCtxName
+    want        = "VRF1"
   }
 }

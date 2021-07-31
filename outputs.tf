@@ -1,9 +1,9 @@
 output "dn" {
-  value       = aci_rest.fvTenant.id
-  description = "Distinguished name of `fvTenant` object"
+  value       = aci_rest.fvBD.id
+  description = "Distinguished name of `fvBD` object"
 }
 
 output "name" {
-  value       = aci_rest.fvTenant.content.name
-  description = "Tenant name"
+  value       = aci_rest.fvBD.content.name
+  description = "Bridge domain name"
 }
