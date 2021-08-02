@@ -1,5 +1,5 @@
 variable "tenant" {
-  description = "Tenant name"
+  description = "Tenant name."
   type        = string
 
   validation {
@@ -9,7 +9,7 @@ variable "tenant" {
 }
 
 variable "name" {
-  description = "Bridge domain name"
+  description = "Bridge domain name."
   type        = string
 
   validation {
@@ -19,7 +19,7 @@ variable "name" {
 }
 
 variable "alias" {
-  description = "Alias"
+  description = "Alias."
   type        = string
   default     = ""
 
@@ -30,7 +30,7 @@ variable "alias" {
 }
 
 variable "description" {
-  description = "Description"
+  description = "Description."
   type        = string
   default     = ""
 
@@ -41,31 +41,31 @@ variable "description" {
 }
 
 variable "arp_flooding" {
-  description = "ARP flooding"
+  description = "ARP flooding."
   type        = bool
   default     = false
 }
 
 variable "advertise_host_routes" {
-  description = "Advertisement of host routes"
+  description = "Advertisement of host routes."
   type        = bool
   default     = false
 }
 
 variable "ip_dataplane_learning" {
-  description = "IP data plane learning"
+  description = "IP data plane learning."
   type        = bool
   default     = true
 }
 
 variable "limit_ip_learn_to_subnets" {
-  description = "Limit ip learning to subnets"
+  description = "Limit IP learning to subnets."
   type        = bool
   default     = true
 }
 
 variable "mac" {
-  description = "MAC address, Format: `12:34:56:78:9A:BC`"
+  description = "MAC address. Format: `12:34:56:78:9A:BC`."
   type        = string
   default     = "00:22:BD:F8:19:FF"
 
@@ -76,13 +76,13 @@ variable "mac" {
 }
 
 variable "l3_multicast" {
-  description = "L3 multicast"
+  description = "L3 multicast."
   type        = bool
   default     = false
 }
 
 variable "multi_destination_flooding" {
-  description = "Multi destination flooding, Choices: `bd-flood`, `encap-flood`, `drop`"
+  description = "Multi destination flooding. Choices: `bd-flood`, `encap-flood`, `drop`."
   type        = string
   default     = "bd-flood"
 
@@ -93,13 +93,13 @@ variable "multi_destination_flooding" {
 }
 
 variable "unicast_routing" {
-  description = "Unicast routing"
+  description = "Unicast routing."
   type        = bool
   default     = true
 }
 
 variable "unknown_unicast" {
-  description = "Unknown unicast forwarding behavior, Choices: `flood`, `proxy`"
+  description = "Unknown unicast forwarding behavior. Choices: `flood`, `proxy`."
   type        = string
   default     = "proxy"
 
@@ -110,7 +110,7 @@ variable "unknown_unicast" {
 }
 
 variable "unknown_ipv4_multicast" {
-  description = "Unknown IPv4 multicast forwarding behavior, Choices: `flood`, `opt-flood`"
+  description = "Unknown IPv4 multicast forwarding behavior. Choices: `flood`, `opt-flood`."
   type        = string
   default     = "flood"
 
@@ -121,7 +121,7 @@ variable "unknown_ipv4_multicast" {
 }
 
 variable "unknown_ipv6_multicast" {
-  description = "Unknown IPV6 multicast forwarding behavior, Choices: `flood`, `opt-flood`"
+  description = "Unknown IPV6 multicast forwarding behavior. Choices: `flood`, `opt-flood`."
   type        = string
   default     = "flood"
 
@@ -132,12 +132,12 @@ variable "unknown_ipv6_multicast" {
 }
 
 variable "vrf" {
-  description = "VRF name"
+  description = "VRF name."
   type        = string
 }
 
 variable "subnets" {
-  description = "List of subnets, Default value `primary_ip`: `false`, Default value `public`: `false`, Default value `shared`: `false`, Default value `igmp_querier`: `false`, Default value `nd_ra_prefix`: `true`, Default value `no_default_gateway`: `false`."
+  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`."
   type = list(object({
     description        = optional(string)
     ip                 = string
@@ -152,9 +152,9 @@ variable "subnets" {
 
   validation {
     condition = alltrue([
-      for s in var.subnets : can(regex("^[a-zA-Z0-9\\!#$%()*,-./:;@ _{|}~?&+]{0,128}$", s.description))
+      for s in var.subnets : s.description == null || can(regex("^[a-zA-Z0-9\\!#$%()*,-./:;@ _{|}~?&+]{0,128}$", s.description))
     ])
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `\\`, `!`, `#`, `$`, `%`, `(`, `)`, `*`, `,`, `-`, `.`, `/`, `:`, `;`, `@`, ` `, `_`, `{`, `|`, }`, `~`, `?`, `&`, `+`. Maximum characters: 128."
+    error_message = "`description`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `\\`, `!`, `#`, `$`, `%`, `(`, `)`, `*`, `,`, `-`, `.`, `/`, `:`, `;`, `@`, ` `, `_`, `{`, `|`, }`, `~`, `?`, `&`, `+`. Maximum characters: 128."
   }
 }
 
@@ -181,15 +181,15 @@ variable "dhcp_labels" {
 
   validation {
     condition = alltrue([
-      for l in var.dhcp_labels : can(regex("^[a-zA-Z0-9_.-]{0,64}$", l.dhcp_relay_policy)) || l.dhcp_relay_policy == null
+      for l in var.dhcp_labels : l.dhcp_relay_policy == null || can(regex("^[a-zA-Z0-9_.-]{0,64}$", l.dhcp_relay_policy))
     ])
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+    error_message = "`dhcp_relay_policy`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 
   validation {
     condition = alltrue([
-      for l in var.dhcp_labels : can(regex("^[a-zA-Z0-9_.-]{0,64}$", l.dhcp_option_policy)) || l.dhcp_option_policy == null
+      for l in var.dhcp_labels : l.dhcp_option_policy == null || can(regex("^[a-zA-Z0-9_.-]{0,64}$", l.dhcp_option_policy))
     ])
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+    error_message = "`dhcp_option_policy`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
