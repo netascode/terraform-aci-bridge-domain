@@ -90,8 +90,8 @@ module "aci_bridge_domain" {
 
 | Name | Description |
 |------|-------------|
-| <a name="output_dn"></a> [dn](#output\_dn) | Distinguished name of `fvBD` object |
-| <a name="output_name"></a> [name](#output\_name) | Bridge domain name |
+| <a name="output_dn"></a> [dn](#output\_dn) | Distinguished name of `fvBD` object. |
+| <a name="output_name"></a> [name](#output\_name) | Bridge domain name. |
 
 ## Resources
 
