@@ -13,7 +13,8 @@ Note that this example will create resources. Resources can be destroyed with `t
 
 ```hcl
 module "aci_bridge_domain" {
-  source = "netascode/bridge-domain/aci"
+  source  = "netascode/bridge-domain/aci"
+  version = ">= 0.0.2"
 
   tenant                     = "ABC"
   name                       = "BD1"

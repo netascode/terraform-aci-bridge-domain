@@ -12,7 +12,8 @@ Location in GUI:
 
 ```hcl
 module "aci_bridge_domain" {
-  source = "netascode/bridge-domain/aci"
+  source  = "netascode/bridge-domain/aci"
+  version = ">= 0.0.2"
 
   tenant                     = "ABC"
   name                       = "BD1"
