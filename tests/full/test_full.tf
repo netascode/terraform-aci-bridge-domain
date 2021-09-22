@@ -44,6 +44,12 @@ module "main" {
     igmp_querier       = true
     nd_ra_prefix       = false
     no_default_gateway = false
+    tags = [
+      {
+        key   = "tag_key"
+        value = "tag_value"
+      }
+    ]
   }]
   l3outs = ["L3OUT1"]
   dhcp_labels = [{
@@ -247,5 +253,27 @@ resource "test_assertions" "fvRsCtx" {
     description = "tnFvCtxName"
     got         = data.aci_rest.fvRsCtx.content.tnFvCtxName
     want        = "VRF1"
+  }
+}
+
+data "aci_rest" "tagTag" {
+  dn = "${data.aci_rest.fvSubnet.id}/tagKey-tag_key"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "tagTag" {
+  component = "tagTag"
+
+  equal "key" {
+    description = "key"
+    got         = data.aci_rest.tagTag.content.key
+    want        = "tag_key"
+  }
+
+  equal "value" {
+    description = "value"
+    got         = data.aci_rest.tagTag.content.value
+    want        = "tag_value"
   }
 }

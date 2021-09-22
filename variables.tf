@@ -137,7 +137,7 @@ variable "vrf" {
 }
 
 variable "subnets" {
-  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`."
+  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `tags`: `[]`."
   type = list(object({
     description        = optional(string)
     ip                 = string
@@ -147,6 +147,10 @@ variable "subnets" {
     igmp_querier       = optional(bool)
     nd_ra_prefix       = optional(bool)
     no_default_gateway = optional(bool)
+    tags = optional(list(object({
+      key   = string
+      value = string
+    })))
   }))
   default = []
 
@@ -155,6 +159,24 @@ variable "subnets" {
       for s in var.subnets : s.description == null || can(regex("^[a-zA-Z0-9\\!#$%()*,-./:;@ _{|}~?&+]{0,128}$", s.description))
     ])
     error_message = "`description`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `\\`, `!`, `#`, `$`, `%`, `(`, `)`, `*`, `,`, `-`, `.`, `/`, `:`, `;`, `@`, ` `, `_`, `{`, `|`, }`, `~`, `?`, `&`, `+`. Maximum characters: 128."
+  }
+
+  validation {
+    condition = alltrue([
+      for s in var.subnets : alltrue([
+        for tag in s.tags != null ? s.tags : [] : can(regex("^[a-zA-Z0-9_.-]{0,64}$", tag.value))
+      ])
+    ])
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+
+  validation {
+    condition = alltrue([
+      for s in var.subnets : alltrue([
+        for tag in s.tags != null ? s.tags : [] : can(regex("^[a-zA-Z0-9_.-]{0,64}$", tag.value))
+      ])
+    ])
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
 

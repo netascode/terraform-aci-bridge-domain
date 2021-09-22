@@ -41,6 +41,12 @@ module "aci_bridge_domain" {
     igmp_querier       = true
     nd_ra_prefix       = false
     no_default_gateway = false
+    tags = [
+      {
+        key   = "tag_key"
+        value = "tag_value"
+      }
+    ]
   }]
   l3outs = ["L3OUT1"]
   dhcp_labels = [{
