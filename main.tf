@@ -1,3 +1,15 @@
+locals {
+  tags_list = flatten([
+    for subnet in var.subnets : [
+      for tag in coalesce(subnet.tags, []) : {
+        ip    = subnet.ip
+        key   = tag.key
+        value = tag.value
+      }
+    ]
+  ])
+}
+
 resource "aci_rest" "fvBD" {
   dn         = "uni/tn-${var.tenant}/BD-${var.name}"
   class_name = "fvBD"
@@ -30,6 +42,16 @@ resource "aci_rest" "fvSubnet" {
     preferred = each.value.primary_ip == true ? "yes" : "no"
     ctrl      = join(",", concat(each.value.nd_ra_prefix == true || each.value.nd_ra_prefix == null ? ["nd"] : [], each.value.no_default_gateway == true ? ["no-default-gateway"] : [], each.value.igmp_querier == true ? ["querier"] : []))
     scope     = join(",", concat(each.value.public == true ? ["public"] : ["private"], each.value.shared == true ? ["shared"] : []))
+  }
+}
+
+resource "aci_rest" "tagTag" {
+  for_each   = { for item in local.tags_list : "${item.ip}.${item.key}" => item }
+  dn         = "${aci_rest.fvSubnet["${each.value.ip}"].id}/tagKey-${each.value.key}"
+  class_name = "tagTag"
+  content = {
+    key   = each.value.key
+    value = each.value.value
   }
 }
 
