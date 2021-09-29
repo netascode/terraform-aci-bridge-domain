@@ -1,7 +1,7 @@
 locals {
   tags_list = flatten([
     for subnet in var.subnets : [
-      for tag in subnet.tags != null ? subnet.tags : [] : {
+      for tag in coalesce(subnet.tags, []) : {
         ip    = subnet.ip
         key   = tag.key
         value = tag.value

@@ -137,7 +137,7 @@ variable "vrf" {
 }
 
 variable "subnets" {
-  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `tags`: `[]`."
+  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`."
   type = list(object({
     description        = optional(string)
     ip                 = string
@@ -164,19 +164,19 @@ variable "subnets" {
   validation {
     condition = alltrue([
       for s in var.subnets : alltrue([
-        for tag in s.tags != null ? s.tags : [] : can(regex("^[a-zA-Z0-9_.-]{0,64}$", tag.value))
+        for tag in coalesce(s.tags, []) : can(regex("^[a-zA-Z0-9_.-]{0,64}$", tag.key))
       ])
     ])
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+    error_message = "`tags.key`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 
   validation {
     condition = alltrue([
       for s in var.subnets : alltrue([
-        for tag in s.tags != null ? s.tags : [] : can(regex("^[a-zA-Z0-9_.-]{0,64}$", tag.value))
+        for tag in coalesce(s.tags, []) : can(regex("^[a-zA-Z0-9_.-]{0,64}$", tag.value))
       ])
     ])
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+    error_message = "`tags.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
 
