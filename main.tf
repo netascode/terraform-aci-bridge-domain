@@ -34,7 +34,7 @@ resource "aci_rest" "fvBD" {
 
 resource "aci_rest" "fvSubnet" {
   for_each   = { for subnet in var.subnets : subnet.ip => subnet }
-  dn         = "${aci_rest.fvBD.id}/subnet-[${each.value.ip}]"
+  dn         = "${aci_rest.fvBD.dn}/subnet-[${each.value.ip}]"
   class_name = "fvSubnet"
   content = {
     ip        = each.value.ip
@@ -47,7 +47,7 @@ resource "aci_rest" "fvSubnet" {
 
 resource "aci_rest" "tagTag" {
   for_each   = { for item in local.tags_list : "${item.ip}.${item.key}" => item }
-  dn         = "${aci_rest.fvSubnet["${each.value.ip}"].id}/tagKey-${each.value.key}"
+  dn         = "${aci_rest.fvSubnet[each.value.ip].dn}/tagKey-${each.value.key}"
   class_name = "tagTag"
   content = {
     key   = each.value.key
@@ -57,7 +57,7 @@ resource "aci_rest" "tagTag" {
 
 resource "aci_rest" "fvRsBDToOut" {
   for_each   = toset(var.l3outs)
-  dn         = "${aci_rest.fvBD.id}/rsBDToOut-${each.value}"
+  dn         = "${aci_rest.fvBD.dn}/rsBDToOut-${each.value}"
   class_name = "fvRsBDToOut"
   content = {
     tnL3extOutName = each.value
@@ -66,7 +66,7 @@ resource "aci_rest" "fvRsBDToOut" {
 
 resource "aci_rest" "dhcpLbl" {
   for_each   = { for dhcp_label in var.dhcp_labels : dhcp_label.dhcp_relay_policy => dhcp_label }
-  dn         = "${aci_rest.fvBD.id}/dhcplbl-${each.value.dhcp_relay_policy}"
+  dn         = "${aci_rest.fvBD.dn}/dhcplbl-${each.value.dhcp_relay_policy}"
   class_name = "dhcpLbl"
   content = {
     owner = "tenant",
@@ -76,7 +76,7 @@ resource "aci_rest" "dhcpLbl" {
 
 resource "aci_rest" "dhcpRsDhcpOptionPol" {
   for_each   = { for dhcp_label in var.dhcp_labels : dhcp_label.dhcp_relay_policy => dhcp_label if dhcp_label.dhcp_option_policy != null }
-  dn         = "${aci_rest.dhcpLbl[each.value.dhcp_relay_policy].id}/rsdhcpOptionPol"
+  dn         = "${aci_rest.dhcpLbl[each.value.dhcp_relay_policy].dn}/rsdhcpOptionPol"
   class_name = "dhcpRsDhcpOptionPol"
   content = {
     tnDhcpOptionPolName = each.value.dhcp_option_policy
@@ -84,7 +84,7 @@ resource "aci_rest" "dhcpRsDhcpOptionPol" {
 }
 
 resource "aci_rest" "fvRsCtx" {
-  dn         = "${aci_rest.fvBD.id}/rsctx"
+  dn         = "${aci_rest.fvBD.dn}/rsctx"
   class_name = "fvRsCtx"
   content = {
     tnFvCtxName = var.vrf
