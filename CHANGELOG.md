@@ -1,4 +1,4 @@
-## 0.1.1 (unreleased)
+## 0.1.1
 
 - Add virtual option to subnet
 - Add IGMP interface policy option
