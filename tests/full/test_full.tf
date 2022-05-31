@@ -35,6 +35,8 @@ module "main" {
   unknown_ipv4_multicast     = "opt-flood"
   unknown_ipv6_multicast     = "opt-flood"
   vrf                        = "VRF1"
+  igmp_interface_policy      = "IIP1"
+  igmp_snooping_policy       = "ISP1"
   subnets = [{
     description        = "Subnet Description"
     ip                 = "1.1.1.1/24"
@@ -44,6 +46,7 @@ module "main" {
     igmp_querier       = true
     nd_ra_prefix       = false
     no_default_gateway = false
+    virtual            = true
     tags = [
       {
         key   = "tag_key"
@@ -190,6 +193,12 @@ resource "test_assertions" "fvSubnet" {
     got         = data.aci_rest_managed.fvSubnet.content.scope
     want        = "public,shared"
   }
+
+  equal "virtual" {
+    description = "virtual"
+    got         = data.aci_rest_managed.fvSubnet.content.virtual
+    want        = "yes"
+  }
 }
 
 data "aci_rest_managed" "fvRsBDToOut" {
@@ -253,6 +262,38 @@ resource "test_assertions" "fvRsCtx" {
     description = "tnFvCtxName"
     got         = data.aci_rest_managed.fvRsCtx.content.tnFvCtxName
     want        = "VRF1"
+  }
+}
+
+data "aci_rest_managed" "igmpRsIfPol" {
+  dn = "${data.aci_rest_managed.fvBD.id}/igmpIfP/rsIfPol"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "igmpRsIfPol" {
+  component = "igmpRsIfPol"
+
+  equal "tDn" {
+    description = "tDn"
+    got         = data.aci_rest_managed.igmpRsIfPol.content.tDn
+    want        = "uni/tn-TF/igmpIfPol-IIP1"
+  }
+}
+
+data "aci_rest_managed" "fvRsIgmpsn" {
+  dn = "${data.aci_rest_managed.fvBD.id}/rsigmpsn"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "fvRsIgmpsn" {
+  component = "fvRsIgmpsn"
+
+  equal "tnIgmpSnoopPolName" {
+    description = "tnIgmpSnoopPolName"
+    got         = data.aci_rest_managed.fvRsIgmpsn.content.tnIgmpSnoopPolName
+    want        = "ISP1"
   }
 }
 

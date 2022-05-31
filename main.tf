@@ -42,6 +42,7 @@ resource "aci_rest_managed" "fvSubnet" {
     preferred = each.value.primary_ip == true ? "yes" : "no"
     ctrl      = join(",", concat(each.value.nd_ra_prefix == true || each.value.nd_ra_prefix == null ? ["nd"] : [], each.value.no_default_gateway == true ? ["no-default-gateway"] : [], each.value.igmp_querier == true ? ["querier"] : []))
     scope     = join(",", concat(each.value.public == true ? ["public"] : ["private"], each.value.shared == true ? ["shared"] : []))
+    virtual   = each.value.virtual == true ? "yes" : "no"
   }
 }
 
@@ -88,5 +89,29 @@ resource "aci_rest_managed" "fvRsCtx" {
   class_name = "fvRsCtx"
   content = {
     tnFvCtxName = var.vrf
+  }
+}
+
+resource "aci_rest_managed" "igmpIfP" {
+  count      = var.igmp_interface_policy != "" ? 1 : 0
+  dn         = "${aci_rest_managed.fvBD.dn}/igmpIfP"
+  class_name = "igmpIfP"
+}
+
+resource "aci_rest_managed" "igmpRsIfPol" {
+  count      = var.igmp_interface_policy != "" ? 1 : 0
+  dn         = "${aci_rest_managed.igmpIfP[0].dn}/rsIfPol"
+  class_name = "igmpRsIfPol"
+  content = {
+    tDn = "uni/tn-${var.tenant}/igmpIfPol-${var.igmp_interface_policy}"
+  }
+}
+
+resource "aci_rest_managed" "fvRsIgmpsn" {
+  count      = var.igmp_snooping_policy != "" ? 1 : 0
+  dn         = "${aci_rest_managed.fvBD.dn}/rsigmpsn"
+  class_name = "fvRsIgmpsn"
+  content = {
+    tnIgmpSnoopPolName = var.igmp_snooping_policy
   }
 }

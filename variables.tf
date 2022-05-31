@@ -136,8 +136,20 @@ variable "vrf" {
   type        = string
 }
 
+variable "igmp_interface_policy" {
+  description = "IGMP interface policy."
+  type        = string
+  default     = ""
+}
+
+variable "igmp_snooping_policy" {
+  description = "IGMP snooping policy."
+  type        = string
+  default     = ""
+}
+
 variable "subnets" {
-  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`."
+  description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `virtual`: `false`."
   type = list(object({
     description        = optional(string)
     ip                 = string
@@ -147,6 +159,7 @@ variable "subnets" {
     igmp_querier       = optional(bool)
     nd_ra_prefix       = optional(bool)
     no_default_gateway = optional(bool)
+    virtual            = optional(bool)
     tags = optional(list(object({
       key   = string
       value = string

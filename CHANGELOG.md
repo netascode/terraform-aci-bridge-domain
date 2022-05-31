@@ -1,3 +1,9 @@
+## 0.1.1 (unreleased)
+
+- Add virtual option to subnet
+- Add IGMP interface policy option
+- Add IGMP snooping policy option
+
 ## 0.1.0
 
 - Migrate to devnet provider

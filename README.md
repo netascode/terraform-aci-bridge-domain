@@ -88,7 +88,9 @@ module "aci_bridge_domain" {
 | <a name="input_unknown_ipv4_multicast"></a> [unknown\_ipv4\_multicast](#input\_unknown\_ipv4\_multicast) | Unknown IPv4 multicast forwarding behavior. Choices: `flood`, `opt-flood`. | `string` | `"flood"` | no |
 | <a name="input_unknown_ipv6_multicast"></a> [unknown\_ipv6\_multicast](#input\_unknown\_ipv6\_multicast) | Unknown IPV6 multicast forwarding behavior. Choices: `flood`, `opt-flood`. | `string` | `"flood"` | no |
 | <a name="input_vrf"></a> [vrf](#input\_vrf) | VRF name. | `string` | n/a | yes |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. | <pre>list(object({<br>    description        = optional(string)<br>    ip                 = string<br>    primary_ip         = optional(bool)<br>    public             = optional(bool)<br>    shared             = optional(bool)<br>    igmp_querier       = optional(bool)<br>    nd_ra_prefix       = optional(bool)<br>    no_default_gateway = optional(bool)<br>    tags = optional(list(object({<br>      key   = string<br>      value = string<br>    })))<br>  }))</pre> | `[]` | no |
+| <a name="input_igmp_interface_policy"></a> [igmp\_interface\_policy](#input\_igmp\_interface\_policy) | IGMP interface policy. | `string` | `""` | no |
+| <a name="input_igmp_snooping_policy"></a> [igmp\_snooping\_policy](#input\_igmp\_snooping\_policy) | IGMP snooping policy. | `string` | `""` | no |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `virtual`: `false`. | <pre>list(object({<br>    description        = optional(string)<br>    ip                 = string<br>    primary_ip         = optional(bool)<br>    public             = optional(bool)<br>    shared             = optional(bool)<br>    igmp_querier       = optional(bool)<br>    nd_ra_prefix       = optional(bool)<br>    no_default_gateway = optional(bool)<br>    virtual            = optional(bool)<br>    tags = optional(list(object({<br>      key   = string<br>      value = string<br>    })))<br>  }))</pre> | `[]` | no |
 | <a name="input_l3outs"></a> [l3outs](#input\_l3outs) | List of l3outs | `list(string)` | `[]` | no |
 | <a name="input_dhcp_labels"></a> [dhcp\_labels](#input\_dhcp\_labels) | List of DHCP labels | <pre>list(object({<br>    dhcp_relay_policy  = optional(string)<br>    dhcp_option_policy = optional(string)<br>  }))</pre> | `[]` | no |
 
@@ -108,6 +110,9 @@ module "aci_bridge_domain" {
 | [aci_rest_managed.fvBD](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.fvRsBDToOut](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.fvRsCtx](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.fvRsIgmpsn](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.fvSubnet](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.igmpIfP](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.igmpRsIfPol](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.tagTag](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 <!-- END_TF_DOCS -->
