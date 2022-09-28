@@ -13,7 +13,7 @@ Location in GUI:
 ```hcl
 module "aci_bridge_domain" {
   source  = "netascode/bridge-domain/aci"
-  version = ">= 0.1.0"
+  version = ">= 0.2.0"
 
   tenant                     = "ABC"
   name                       = "BD1"
@@ -59,7 +59,7 @@ module "aci_bridge_domain" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_aci"></a> [aci](#requirement\_aci) | >= 2.0.0 |
 
 ## Providers
@@ -90,9 +90,9 @@ module "aci_bridge_domain" {
 | <a name="input_vrf"></a> [vrf](#input\_vrf) | VRF name. | `string` | n/a | yes |
 | <a name="input_igmp_interface_policy"></a> [igmp\_interface\_policy](#input\_igmp\_interface\_policy) | IGMP interface policy. | `string` | `""` | no |
 | <a name="input_igmp_snooping_policy"></a> [igmp\_snooping\_policy](#input\_igmp\_snooping\_policy) | IGMP snooping policy. | `string` | `""` | no |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `virtual`: `false`. | <pre>list(object({<br>    description        = optional(string)<br>    ip                 = string<br>    primary_ip         = optional(bool)<br>    public             = optional(bool)<br>    shared             = optional(bool)<br>    igmp_querier       = optional(bool)<br>    nd_ra_prefix       = optional(bool)<br>    no_default_gateway = optional(bool)<br>    virtual            = optional(bool)<br>    tags = optional(list(object({<br>      key   = string<br>      value = string<br>    })))<br>  }))</pre> | `[]` | no |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `virtual`: `false`. | <pre>list(object({<br>    description        = optional(string, "")<br>    ip                 = string<br>    primary_ip         = optional(bool, false)<br>    public             = optional(bool, false)<br>    shared             = optional(bool, false)<br>    igmp_querier       = optional(bool, false)<br>    nd_ra_prefix       = optional(bool, true)<br>    no_default_gateway = optional(bool, false)<br>    virtual            = optional(bool, false)<br>    tags = optional(list(object({<br>      key   = string<br>      value = string<br>    })), [])<br>  }))</pre> | `[]` | no |
 | <a name="input_l3outs"></a> [l3outs](#input\_l3outs) | List of l3outs | `list(string)` | `[]` | no |
-| <a name="input_dhcp_labels"></a> [dhcp\_labels](#input\_dhcp\_labels) | List of DHCP labels | <pre>list(object({<br>    dhcp_relay_policy  = optional(string)<br>    dhcp_option_policy = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_dhcp_labels"></a> [dhcp\_labels](#input\_dhcp\_labels) | List of DHCP labels | <pre>list(object({<br>    dhcp_relay_policy  = string<br>    dhcp_option_policy = optional(string)<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 

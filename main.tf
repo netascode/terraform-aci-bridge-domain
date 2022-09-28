@@ -1,7 +1,7 @@
 locals {
   tags_list = flatten([
     for subnet in var.subnets : [
-      for tag in coalesce(subnet.tags, []) : {
+      for tag in subnet.tags : {
         ip    = subnet.ip
         key   = tag.key
         value = tag.value
@@ -38,9 +38,9 @@ resource "aci_rest_managed" "fvSubnet" {
   class_name = "fvSubnet"
   content = {
     ip        = each.value.ip
-    descr     = each.value.description != null ? each.value.description : ""
+    descr     = each.value.description
     preferred = each.value.primary_ip == true ? "yes" : "no"
-    ctrl      = join(",", concat(each.value.nd_ra_prefix == true || each.value.nd_ra_prefix == null ? ["nd"] : [], each.value.no_default_gateway == true ? ["no-default-gateway"] : [], each.value.igmp_querier == true ? ["querier"] : []))
+    ctrl      = join(",", concat(each.value.nd_ra_prefix == true ? ["nd"] : [], each.value.no_default_gateway == true ? ["no-default-gateway"] : [], each.value.igmp_querier == true ? ["querier"] : []))
     scope     = join(",", concat(each.value.public == true ? ["public"] : ["private"], each.value.shared == true ? ["shared"] : []))
     virtual   = each.value.virtual == true ? "yes" : "no"
   }

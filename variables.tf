@@ -151,19 +151,19 @@ variable "igmp_snooping_policy" {
 variable "subnets" {
   description = "List of subnets. Default value `primary_ip`: `false`. Default value `public`: `false`. Default value `shared`: `false`. Default value `igmp_querier`: `false`. Default value `nd_ra_prefix`: `true`. Default value `no_default_gateway`: `false`. Default value `virtual`: `false`."
   type = list(object({
-    description        = optional(string)
+    description        = optional(string, "")
     ip                 = string
-    primary_ip         = optional(bool)
-    public             = optional(bool)
-    shared             = optional(bool)
-    igmp_querier       = optional(bool)
-    nd_ra_prefix       = optional(bool)
-    no_default_gateway = optional(bool)
-    virtual            = optional(bool)
+    primary_ip         = optional(bool, false)
+    public             = optional(bool, false)
+    shared             = optional(bool, false)
+    igmp_querier       = optional(bool, false)
+    nd_ra_prefix       = optional(bool, true)
+    no_default_gateway = optional(bool, false)
+    virtual            = optional(bool, false)
     tags = optional(list(object({
       key   = string
       value = string
-    })))
+    })), [])
   }))
   default = []
 
@@ -209,7 +209,7 @@ variable "l3outs" {
 variable "dhcp_labels" {
   description = "List of DHCP labels"
   type = list(object({
-    dhcp_relay_policy  = optional(string)
+    dhcp_relay_policy  = string
     dhcp_option_policy = optional(string)
   }))
   default = []
