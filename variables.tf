@@ -88,7 +88,7 @@ variable "virtual_mac" {
   default     = "00:22:BD:F8:19:FF"
 
   validation {
-    condition     = can(regex("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$", var.mac))
+    condition     = can(regex("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$", var.virtual_mac))
     error_message = "Format: `12:34:56:78:9A:BC`."
   }
 }
