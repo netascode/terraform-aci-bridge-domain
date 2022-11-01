@@ -75,6 +75,24 @@ variable "mac" {
   }
 }
 
+variable "ep_move_detection" {
+  description = "Endpoint Move Detection flag."
+  type        = bool
+  default     = false
+
+}
+
+variable "virtual_mac" {
+  description = "Virtual MAC address. Format: `12:34:56:78:9A:BC`."
+  type        = string
+  default     = "00:22:BD:F8:19:FF"
+
+  validation {
+    condition     = can(regex("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$", var.mac))
+    error_message = "Format: `12:34:56:78:9A:BC`."
+  }
+}
+
 variable "l3_multicast" {
   description = "L3 multicast."
   type        = bool

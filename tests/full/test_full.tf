@@ -30,6 +30,8 @@ module "main" {
   ip_dataplane_learning      = false
   limit_ip_learn_to_subnets  = false
   mac                        = "11:11:11:11:11:11"
+  ep_move_detection          = true
+  virtual_mac                = "22:22:22:22:22:22"
   l3_multicast               = true
   multi_destination_flooding = "drop"
   unicast_routing            = false
@@ -118,6 +120,18 @@ resource "test_assertions" "fvBD" {
     description = "mac"
     got         = data.aci_rest_managed.fvBD.content.mac
     want        = "11:11:11:11:11:11"
+  }
+
+  equal "epMoveDetectMode" {
+    description = "epMoveDetectMode"
+    got         = data.aci_rest_managed.fvBD.content.epMoveDetectMode
+    want        = "garp"
+  }
+
+  equal "vmac" {
+    description = "vmac"
+    got         = data.aci_rest_managed.fvBD.content.vmac
+    want        = "22:22:22:22:22:22"
   }
 
   equal "mcastAllow" {

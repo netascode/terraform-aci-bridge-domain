@@ -25,6 +25,8 @@ module "aci_bridge_domain" {
   ip_dataplane_learning      = false
   limit_ip_learn_to_subnets  = false
   mac                        = "11:11:11:11:11:11"
+  ep_move_detection          = true
+  virtual_mac                = "22:22:22:22:22:22"
   l3_multicast               = true
   multi_destination_flooding = "drop"
   unicast_routing            = false
