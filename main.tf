@@ -32,6 +32,14 @@ resource "aci_rest_managed" "fvBD" {
   }
 }
 
+resource "aci_rest_managed" "fvRsCtx" {
+  dn         = "${aci_rest_managed.fvBD.dn}/rsctx"
+  class_name = "fvRsCtx"
+  content = {
+    tnFvCtxName = var.vrf
+  }
+}
+
 resource "aci_rest_managed" "fvSubnet" {
   for_each   = { for subnet in var.subnets : subnet.ip => subnet }
   dn         = "${aci_rest_managed.fvBD.dn}/subnet-[${each.value.ip}]"
@@ -44,6 +52,10 @@ resource "aci_rest_managed" "fvSubnet" {
     scope     = join(",", concat(each.value.public == true ? ["public"] : ["private"], each.value.shared == true ? ["shared"] : []))
     virtual   = each.value.virtual == true ? "yes" : "no"
   }
+
+  depends_on = [
+    aci_rest_managed.fvRsCtx,
+  ]
 }
 
 resource "aci_rest_managed" "tagTag" {
@@ -63,6 +75,10 @@ resource "aci_rest_managed" "fvRsBDToOut" {
   content = {
     tnL3extOutName = each.value
   }
+
+  depends_on = [
+    aci_rest_managed.fvRsCtx,
+  ]
 }
 
 resource "aci_rest_managed" "dhcpLbl" {
@@ -73,6 +89,10 @@ resource "aci_rest_managed" "dhcpLbl" {
     owner = "tenant",
     name  = each.value.dhcp_relay_policy
   }
+
+  depends_on = [
+    aci_rest_managed.fvRsCtx,
+  ]
 }
 
 resource "aci_rest_managed" "dhcpRsDhcpOptionPol" {
@@ -81,14 +101,6 @@ resource "aci_rest_managed" "dhcpRsDhcpOptionPol" {
   class_name = "dhcpRsDhcpOptionPol"
   content = {
     tnDhcpOptionPolName = each.value.dhcp_option_policy
-  }
-}
-
-resource "aci_rest_managed" "fvRsCtx" {
-  dn         = "${aci_rest_managed.fvBD.dn}/rsctx"
-  class_name = "fvRsCtx"
-  content = {
-    tnFvCtxName = var.vrf
   }
 }
 
