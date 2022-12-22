@@ -1,4 +1,4 @@
-## 0.2.2 (unreleased)
+## 0.2.2
 
 - Add `ep_move_detection` and `virtual_mac` attributes
 
