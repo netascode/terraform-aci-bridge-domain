@@ -22,6 +22,8 @@ resource "aci_rest_managed" "fvBD" {
     ipLearning            = var.ip_dataplane_learning == true ? "yes" : "no"
     limitIpLearnToSubnets = var.limit_ip_learn_to_subnets == true ? "yes" : "no"
     mac                   = var.mac
+    epMoveDetectMode      = var.ep_move_detection == true ? "garp" : ""
+    vmac                  = var.virtual_mac
     mcastAllow            = var.l3_multicast == true ? "yes" : "no"
     multiDstPktAct        = var.multi_destination_flooding
     type                  = "regular"
