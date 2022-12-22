@@ -76,7 +76,7 @@ variable "mac" {
 }
 
 variable "ep_move_detection" {
-  description = "Endpoint Move Detection flag."
+  description = "Endpoint move detection flag."
   type        = bool
   default     = false
 
@@ -85,10 +85,10 @@ variable "ep_move_detection" {
 variable "virtual_mac" {
   description = "Virtual MAC address. Format: `12:34:56:78:9A:BC`."
   type        = string
-  default     = "00:22:BD:F8:19:FF"
+  default     = ""
 
   validation {
-    condition     = can(regex("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$", var.virtual_mac))
+    condition     = var.virtual_mac == "" || can(regex("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$", var.virtual_mac))
     error_message = "Format: `12:34:56:78:9A:BC`."
   }
 }

@@ -1,3 +1,7 @@
+## 0.2.2 (unreleased)
+
+- Add `ep_move_detection` and `virtual_mac` attributes
+
 ## 0.2.1
 
 - Add dependencies to ensure BD is associated to final VRF first
